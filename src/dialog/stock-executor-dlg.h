@@ -1,9 +1,9 @@
-
 // stock-executor-dlg.h: 헤더 파일
 //
-
 #pragma once
 
+#include "helper/wmca_intf.h"
+#include "helper/wmca_msg_event.h"
 
 // CStockExecutorDlg 대화 상자
 class CStockExecutorDlg : public CDHtmlDialog
@@ -32,6 +32,11 @@ protected:
     afx_msg void OnSysCommand(UINT nID, LPARAM lParam);
     afx_msg void OnPaint();
     afx_msg HCURSOR OnQueryDragIcon();
+    // Wmca functions
+    afx_msg LRESULT OnWmcaEvent(WPARAM wParam, LPARAM lParam);
     DECLARE_MESSAGE_MAP()
     DECLARE_DHTML_EVENT_MAP()
+
+private:
+    CWmcaMsgEvent m_wmcaMsgEvent;
 };

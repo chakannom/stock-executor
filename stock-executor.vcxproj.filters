@@ -13,37 +13,24 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="framework.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="targetver.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="pch.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="resource.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="stock-executor.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="stock-executor-dlg.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="pch.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="stock-executor.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="stock-executor-dlg.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
+    <Filter Include="헤더 파일\core">
+      <UniqueIdentifier>{a86e53e1-360b-4192-8bd1-ea6abcf53f97}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\helper">
+      <UniqueIdentifier>{67a0e116-2f1d-4ff1-a277-6f07bfe9295f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\core">
+      <UniqueIdentifier>{3b3398df-a6a9-4993-8bad-e8798e09f8a9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\helper">
+      <UniqueIdentifier>{3716c34c-7c2e-4681-a3e6-acdc49b34143}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\dialog">
+      <UniqueIdentifier>{17dce999-cd24-4b24-8c5d-b55f517d1191}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\dialog">
+      <UniqueIdentifier>{6e6072f7-058a-47d1-a6fe-d234ab684301}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="res\stockexecutor.rc2">
@@ -65,5 +52,48 @@
     <Image Include="res\stock-executor.ico">
       <Filter>리소스 파일</Filter>
     </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\stock-executor.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\framework.h">
+      <Filter>헤더 파일\core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\resource.h">
+      <Filter>헤더 파일\core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\targetver.h">
+      <Filter>헤더 파일\core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\helper\wmca_intf.h">
+      <Filter>헤더 파일\helper</Filter>
+    </ClInclude>
+    <ClInclude Include="src\helper\wmca_msg_event.h">
+      <Filter>헤더 파일\helper</Filter>
+    </ClInclude>
+    <ClInclude Include="src\dialog\stock-executor-dlg.h">
+      <Filter>헤더 파일\dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="src\dialog\about-dlg.h">
+      <Filter>헤더 파일\dialog</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\stock-executor.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="src\helper\wmca_intf.cpp">
+      <Filter>소스 파일\helper</Filter>
+    </ClCompile>
+    <ClCompile Include="src\helper\wmca_msg_event.cpp">
+      <Filter>소스 파일\helper</Filter>
+    </ClCompile>
+    <ClCompile Include="src\dialog\stock-executor-dlg.cpp">
+      <Filter>소스 파일\dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="src\dialog\about-dlg.cpp">
+      <Filter>소스 파일\dialog</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

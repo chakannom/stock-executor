@@ -2,49 +2,15 @@
 // stock-executor-dlg.cpp: 구현 파일
 //
 
-#include "pch.h"
-#include "framework.h"
+#include "core/framework.h"
 #include "stock-executor.h"
+#include "about-dlg.h"
 #include "stock-executor-dlg.h"
 #include "afxdialogex.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
-
-
-// 응용 프로그램 정보에 사용되는 CAboutDlg 대화 상자입니다.
-
-class CAboutDlg : public CDialogEx
-{
-public:
-    CAboutDlg();
-
-// 대화 상자 데이터입니다.
-#ifdef AFX_DESIGN_TIME
-    enum { IDD = IDD_ABOUTBOX };
-#endif
-
-    protected:
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 지원입니다.
-
-// 구현입니다.
-protected:
-    DECLARE_MESSAGE_MAP()
-};
-
-CAboutDlg::CAboutDlg() : CDialogEx(IDD_ABOUTBOX)
-{
-}
-
-void CAboutDlg::DoDataExchange(CDataExchange* pDX)
-{
-    CDialogEx::DoDataExchange(pDX);
-}
-
-BEGIN_MESSAGE_MAP(CAboutDlg, CDialogEx)
-END_MESSAGE_MAP()
-
 
 // CStockExecutorDlg 대화 상자
 
@@ -67,6 +33,7 @@ void CStockExecutorDlg::DoDataExchange(CDataExchange* pDX)
 
 BEGIN_MESSAGE_MAP(CStockExecutorDlg, CDHtmlDialog)
     ON_WM_SYSCOMMAND()
+    ON_MESSAGE(CA_WMCAEVENT, OnWmcaEvent)
 END_MESSAGE_MAP()
 
 
@@ -167,4 +134,41 @@ HRESULT CStockExecutorDlg::OnButtonCancel(IHTMLElement* /*pElement*/)
 {
     OnCancel();
     return S_OK;
+}
+
+//━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+//	wmca.dll로 부터 수신한 윈도우 메시지를 통해 각 이벤트 핸들러로 분기합니다
+//━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+LRESULT CStockExecutorDlg::OnWmcaEvent(WPARAM dwMessageType, LPARAM lParam)
+{
+    switch (dwMessageType) {
+    case CA_CONNECTED:          //로그인 성공
+        m_wmcaMsgEvent.OnWmConnected((LOGINBLOCK*)lParam);
+        break;
+    case CA_DISCONNECTED:       //접속 끊김
+        m_wmcaMsgEvent.OnWmDisconnected();
+        break;
+    case CA_SOCKETERROR:        //통신 오류 발생
+        m_wmcaMsgEvent.OnWmSocketError((int)lParam);
+        break;
+    case CA_RECEIVEDATA:        //서비스 응답 수신(TR)
+        m_wmcaMsgEvent.OnWmReceiveData((OUTDATABLOCK*)lParam);
+        break;
+    case CA_RECEIVESISE:        //실시간 데이터 수신(BC)
+        m_wmcaMsgEvent.OnWmReceiveSise((OUTDATABLOCK*)lParam);
+        break;
+    case CA_RECEIVEMESSAGE:     //상태 메시지 수신 (입력값이 잘못되었을 경우 문자열형태로 설명이 수신됨)
+        m_wmcaMsgEvent.OnWmReceiveMessage((OUTDATABLOCK*)lParam);
+        break;
+    case CA_RECEIVECOMPLETE:    //서비스 처리 완료
+        m_wmcaMsgEvent.OnWmReceiveComplete((OUTDATABLOCK*)lParam);
+        break;
+    case CA_RECEIVEERROR:       //서비스 처리중 오류 발생 (입력값 오류등)
+        m_wmcaMsgEvent.OnWmReceiveError((OUTDATABLOCK*)lParam);
+        break;
+    default:
+        break;
+    }
+
+    return TRUE;
 }

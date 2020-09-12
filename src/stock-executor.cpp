@@ -2,10 +2,9 @@
 // stock-executor.cpp: 애플리케이션에 대한 클래스 동작을 정의합니다.
 //
 
-#include "pch.h"
-#include "framework.h"
+#include "core/framework.h"
+#include "dialog/stock-executor-dlg.h"
 #include "stock-executor.h"
-#include "stock-executor-dlg.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW

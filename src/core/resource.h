@@ -1,6 +1,6 @@
 //{{NO_DEPENDENCIES}}
-// Microsoft Visual C++ì—ì„œ ìƒì„±í•œ í¬í•¨ íŒŒì¼ì…ë‹ˆë‹¤.
-// C:\Users\chakannom\Development\workspace\stock-executor\res\stockexecutor.rcì—ì„œ ì‚¬ìš©ë˜ê³  ìˆìŠµë‹ˆë‹¤.
+// Microsoft Visual C++¿¡¼­ »ı¼ºÇÑ Æ÷ÇÔ ÆÄÀÏÀÔ´Ï´Ù.
+// C:\Users\chakannom\Development\workspace\visualstudio\stock-executor\res\stockexecutor.rc¿¡¼­ »ç¿ëµÇ°í ÀÖ½À´Ï´Ù.
 //
 #define IDM_ABOUTBOX                    0x0010
 #define IDD_ABOUTBOX                    100

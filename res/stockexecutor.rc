@@ -56,7 +56,7 @@ BEGIN
     "#include ""stockexecutor.rc2""  // Microsoft Visual C++ 이외의 다른 도구에서 편집한 리소스입니다.\r\n"
     "#include ""l.KOR\\afxres.rc""      // 표준 구성 요소\r\n"
     "#if !defined(_AFXDLL)\r\n"
-    "#include ""l.KOR\\afxribbon.rc""   // MFC 리본 및 컨트롤 막대 리소스r\n"
+    "#include ""l.KOR\\afxribbon.rc""   // MFC 리본 및 컨트롤 막대 리소스\r\n"
     "#endif\r\n"
     "#endif\r\n"
     "\0"
@@ -105,8 +105,10 @@ END
 // HTML
 //
 
-IDR_HTML_STOCKEXECUTOR_DIALOG HTML                    "stock-executor.html"
-
+// for Develop
+IDR_HTML_STOCKEXECUTOR_DIALOG HTML                    "develop\\stock-executor.html"
+// for Release
+//IDR_HTML_STOCKEXECUTOR_DIALOG HTML                    "release\\stock-executor.html"
 
 /////////////////////////////////////////////////////////////////////////////
 //

@@ -96,10 +96,11 @@
       <PrecompiledHeaderFile>
       </PrecompiledHeaderFile>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalIncludeDirectories>$(SolutionDir)\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(VcpkgRoot)\installed\x86-windows\include;$(SolutionDir)\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
+      <AdditionalLibraryDirectories>$(VcpkgRoot)\installed\x86-windows\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <Midl>
       <MkTypLibCompatible>false</MkTypLibCompatible>
@@ -190,10 +191,9 @@
     <None Include=".gitignore" />
     <None Include="LICENSE" />
     <None Include="README.md" />
+    <None Include="res\develop\stock-executor.html" />
+    <None Include="res\release\stock-executor.html" />
     <None Include="res\stockexecutor.rc2" />
-    <None Include="res\stock-executor.html">
-      <DeploymentContent>true</DeploymentContent>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="res\stockexecutor.rc" />
@@ -207,13 +207,16 @@
     <ClInclude Include="src\core\targetver.h" />
     <ClInclude Include="src\dialog\about-dlg.h" />
     <ClInclude Include="src\dialog\stock-executor-dlg.h" />
+    <ClInclude Include="src\helper\stock_msg_event.h" />
     <ClInclude Include="src\helper\wmca_intf.h" />
     <ClInclude Include="src\helper\wmca_msg_event.h" />
     <ClInclude Include="src\stock-executor.h" />
+    <ClInclude Include="src\util\string_util.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\dialog\about-dlg.cpp" />
     <ClCompile Include="src\dialog\stock-executor-dlg.cpp" />
+    <ClCompile Include="src\helper\stock_msg_event.cpp" />
     <ClCompile Include="src\helper\wmca_intf.cpp" />
     <ClCompile Include="src\helper\wmca_msg_event.cpp" />
     <ClCompile Include="src\stock-executor.cpp" />

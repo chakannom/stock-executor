@@ -2,7 +2,11 @@
 // stock-executor-dlg.cpp: 구현 파일
 //
 
+#include <string>
+#include <cpprest/json.h>
+
 #include "core/framework.h"
+#include "util/string_util.h"
 #include "stock-executor.h"
 #include "about-dlg.h"
 #include "stock-executor-dlg.h"
@@ -15,6 +19,7 @@
 // CStockExecutorDlg 대화 상자
 
 BEGIN_DHTML_EVENT_MAP(CStockExecutorDlg)
+    DHTML_EVENT_ONCLICK(_T("ButtonConnect"), OnButtonConnect)
     DHTML_EVENT_ONCLICK(_T("ButtonOK"), OnButtonOK)
     DHTML_EVENT_ONCLICK(_T("ButtonCancel"), OnButtonCancel)
 END_DHTML_EVENT_MAP()
@@ -33,6 +38,12 @@ void CStockExecutorDlg::DoDataExchange(CDataExchange* pDX)
 
 BEGIN_MESSAGE_MAP(CStockExecutorDlg, CDHtmlDialog)
     ON_WM_SYSCOMMAND()
+    ON_WM_COPYDATA()
+
+    // for Executor
+    ON_BN_CLICKED(IDC_BTN_CONNECT, OnConnect)
+
+    // for WmcaEvent
     ON_MESSAGE(CA_WMCAEVENT, OnWmcaEvent)
 END_MESSAGE_MAP()
 
@@ -88,6 +99,23 @@ void CStockExecutorDlg::OnSysCommand(UINT nID, LPARAM lParam)
     }
 }
 
+// This is a function to receive data from another application.
+BOOL CStockExecutorDlg::OnCopyData(CWnd* pWnd, COPYDATASTRUCT* pCopyDataStruct)
+{
+    switch (pCopyDataStruct->dwData) {
+    case WM_STOCK_EXECUTOR_SETSTRINGVARIABLE:
+    {
+        m_strData = (LPCTSTR)pCopyDataStruct->lpData;
+        break;
+    }
+    default:
+        break;
+    }
+
+    return CDHtmlDialog::OnCopyData(pWnd, pCopyDataStruct);
+
+}
+
 // 대화 상자에 최소화 단추를 추가할 경우 아이콘을 그리려면
 //  아래 코드가 필요합니다.  문서/뷰 모델을 사용하는 MFC 애플리케이션의 경우에는
 //  프레임워크에서 이 작업을 자동으로 수행합니다.
@@ -124,6 +152,24 @@ HCURSOR CStockExecutorDlg::OnQueryDragIcon()
     return static_cast<HCURSOR>(m_hIcon);
 }
 
+HRESULT CStockExecutorDlg::OnButtonConnect(IHTMLElement* /*pElement*/)
+{
+    web::json::value cRequestJson = web::json::value::object();
+    cRequestJson[L"id"] = web::json::value::string(L"stock_id");
+    cRequestJson[L"pw"] = web::json::value::string(L"stock_pw");
+    cRequestJson[L"certPw"] = web::json::value::string(L"stock_certPw");
+    std::wstring jsonString = cRequestJson.serialize();
+
+    COPYDATASTRUCT cds;
+    cds.dwData = WM_STOCK_EXECUTOR_SETSTRINGVARIABLE;
+    cds.cbData = jsonString.size();
+    cds.lpData = (PVOID)jsonString.c_str();
+
+    SendMessage(WM_COPYDATA, 0, (LPARAM)&cds);
+    SendMessage(WM_COMMAND, IDC_BTN_CONNECT, 0);
+    return S_OK;
+}
+
 HRESULT CStockExecutorDlg::OnButtonOK(IHTMLElement* /*pElement*/)
 {
     OnOK();
@@ -134,6 +180,20 @@ HRESULT CStockExecutorDlg::OnButtonCancel(IHTMLElement* /*pElement*/)
 {
     OnCancel();
     return S_OK;
+}
+
+//━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+void CStockExecutorDlg::OnConnect()
+{
+    web::json::value cRequestModel = web::json::value::parse(m_strData);
+
+    const char* szId = cks::StringUtil::wctoc(cRequestModel.at(L"id").as_string().c_str());
+    const char* szPw = cks::StringUtil::wctoc(cRequestModel.at(L"pw").as_string().c_str());
+    const char* szCertPw = cks::StringUtil::wctoc(cRequestModel.at(L"certPw").as_string().c_str());
+
+    //접속 및 로그인
+    //매체코드는 특별한 경우를 제외하고 항상 아래 기본값을 사용하시기 바랍니다.
+    m_wmca.Connect(GetSafeHwnd(), CA_WMCAEVENT, 'T', 'W', szId, szPw, szCertPw);	//Namuh OpenAPI 사용자용
 }
 
 //━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━

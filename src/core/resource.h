@@ -10,6 +10,7 @@
 #define IDR_MAINFRAME                   128
 // for Executor
 #define IDC_BTN_CONNECT                 1000
+#define IDC_BTN_DISCONNECT              1001
 
 // Next default values for new objects
 // 

@@ -22,8 +22,9 @@ public:
 
     protected:
     virtual void DoDataExchange(CDataExchange* pDX);	// DDX/DDV 지원입니다.
-
+    // Action functions for debugging
     HRESULT OnButtonConnect(IHTMLElement* pElement);
+    HRESULT OnButtonDIsconnect(IHTMLElement* pElement);
     HRESULT OnButtonOK(IHTMLElement *pElement);
     HRESULT OnButtonCancel(IHTMLElement *pElement);
 
@@ -42,6 +43,7 @@ protected:
 
     // Executor functions
     afx_msg void OnConnect();
+    afx_msg void OnDisconnect();
 
     // Wmca functions
     afx_msg LRESULT OnWmcaEvent(WPARAM wParam, LPARAM lParam);

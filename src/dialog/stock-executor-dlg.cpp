@@ -20,6 +20,7 @@
 
 BEGIN_DHTML_EVENT_MAP(CStockExecutorDlg)
     DHTML_EVENT_ONCLICK(_T("ButtonConnect"), OnButtonConnect)
+    DHTML_EVENT_ONCLICK(_T("ButtonDisconnect"), OnButtonDIsconnect)
     DHTML_EVENT_ONCLICK(_T("ButtonOK"), OnButtonOK)
     DHTML_EVENT_ONCLICK(_T("ButtonCancel"), OnButtonCancel)
 END_DHTML_EVENT_MAP()
@@ -42,6 +43,7 @@ BEGIN_MESSAGE_MAP(CStockExecutorDlg, CDHtmlDialog)
 
     // for Executor
     ON_BN_CLICKED(IDC_BTN_CONNECT, OnConnect)
+    ON_BN_CLICKED(IDC_BTN_DISCONNECT, OnDisconnect)
 
     // for WmcaEvent
     ON_MESSAGE(CA_WMCAEVENT, OnWmcaEvent)
@@ -170,6 +172,12 @@ HRESULT CStockExecutorDlg::OnButtonConnect(IHTMLElement* /*pElement*/)
     return S_OK;
 }
 
+HRESULT CStockExecutorDlg::OnButtonDIsconnect(IHTMLElement* /*pElement*/)
+{
+    SendMessage(WM_COMMAND, IDC_BTN_DISCONNECT, 0);
+    return S_OK;
+}
+
 HRESULT CStockExecutorDlg::OnButtonOK(IHTMLElement* /*pElement*/)
 {
     OnOK();
@@ -194,6 +202,12 @@ void CStockExecutorDlg::OnConnect()
     //접속 및 로그인
     //매체코드는 특별한 경우를 제외하고 항상 아래 기본값을 사용하시기 바랍니다.
     m_wmca.Connect(GetSafeHwnd(), CA_WMCAEVENT, 'T', 'W', szId, szPw, szCertPw);	//Namuh OpenAPI 사용자용
+}
+
+//━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+void CStockExecutorDlg::OnDisconnect()
+{
+    m_wmca.Disconnect();
 }
 
 //━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━

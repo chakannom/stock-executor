@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cpprest/json.h>
+
 class CWmcaMsgEvent
 {
 public:
@@ -11,5 +13,10 @@ public:
     void OnWmReceiveMessage(OUTDATABLOCK* pMessage);
     void OnWmReceiveComplete(OUTDATABLOCK* pOutData);
     void OnWmReceiveError(OUTDATABLOCK* pError);
+private:
+    web::json::value responseJson = web::json::value::object();
+    bool onlyDisconnect = true;
+
+    void clearResponseJson();
 };
 

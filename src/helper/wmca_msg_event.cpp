@@ -1,3 +1,4 @@
+#define UNICODE
 #include "core/framework.h"
 #include "util/string_util.h"
 #include "wmca_intf.h"

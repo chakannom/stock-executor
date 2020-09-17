@@ -1,0 +1,30 @@
+{
+    "configurations": [
+        {
+            "name": "Win32",
+            "defines": [
+                "_DEBUG",
+                "UNICODE",
+                "_UNICODE"
+            ],
+            "compilerPath": "C:/Program Files (x86)/Microsoft Visual Studio/2019/BuildTools/VC/Tools/MSVC/14.26.28801/bin/Hostx64/x86/cl.exe",
+            "windowsSdkVersion": "10.0.18362.0",
+            "intelliSenseMode": "msvc-x86",
+            "cStandard": "c11",
+            "cppStandard": "c++17",
+            "includePath": [
+                "${workspaceRoot}/src",
+                "C:/Users/chakannom/Development/tools/vcpkg/installed/x86-windows/include"
+            ],
+            "browse": {
+                "limitSymbolsToIncludedHeaders": true,
+                "databaseFilename": "",
+                "path": [
+                    "${workspaceRoot}/src",
+                    "C:/Users/chakannom/Development/tools/vcpkg/installed/x86-windows/include"
+                ]
+            }
+        }
+    ],
+    "version": 4
+}

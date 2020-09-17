@@ -1,0 +1,46 @@
+{
+    "version": "2.0.0",
+    "options": {
+        "shell": {
+            "executable": "C:\\Windows\\System32\\cmd.exe",
+            "args": [
+                "/d", "/c",
+                "C:\\Program^ Files^ ^(x86^)\\Microsoft^ Visual^ Studio\\2019\\BuildTools\\VC\\Auxiliary\\Build\\vcvars32.bat",
+                "&&"
+            ]
+        }
+    },
+    "tasks": [
+        {
+            "type": "shell",
+            "label": "C/C++: cl.exe build active file",
+            "command": "cl.exe",
+            "args": [
+                "/utf-8",
+                "/Zi",
+                "/EHsc",
+                "/Fe:",
+                "${workspaceFolder}\\build\\stock-executor.exe",
+                "${workspaceFolder}\\src\\dialog\\*.cpp",
+                "${workspaceFolder}\\src\\helper\\*.cpp",
+                "${workspaceFolder}\\src\\stock-executor.cpp",
+                "/I",
+                "C:\\Users\\chakannom\\Development\\tools\\vcpkg\\installed\\x86-windows\\include",
+                "/I",
+                "${workspaceFolder}\\src",
+                "/link",
+                "C:\\Users\\chakannom\\Development\\tools\\vcpkg\\installed\\x86-windows\\lib\\*.lib"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}\\build"
+            },
+            "problemMatcher": [
+                "$msCompile"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        }
+    ]
+}

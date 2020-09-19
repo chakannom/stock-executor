@@ -1,3 +1,4 @@
+#define UNICODE
 #include "core/framework.h"
 #include "wmca_intf.h"
 #include "wmca_msg_event.h"

@@ -6,7 +6,6 @@
 #include <cpprest/json.h>
 
 #include "core/framework.h"
-#include "util/string_util.h"
 #include "stock-executor.h"
 #include "about-dlg.h"
 #include "stock-executor-dlg.h"
@@ -156,10 +155,10 @@ HCURSOR CStockExecutorDlg::OnQueryDragIcon()
 
 HRESULT CStockExecutorDlg::OnButtonConnect(IHTMLElement* /*pElement*/)
 {
-    web::json::value cRequestJson = web::json::value::object();
-    cRequestJson[L"id"] = web::json::value::string(L"stock_id");
-    cRequestJson[L"pw"] = web::json::value::string(L"stock_pw");
-    cRequestJson[L"certPw"] = web::json::value::string(L"stock_certPw");
+    web::json::value cRequestJson;
+    cRequestJson[L"id"] = web::json::value::string(L"id");
+    cRequestJson[L"pw"] = web::json::value::string(L"pw");
+    cRequestJson[L"certPw"] = web::json::value::string(L"certPw");
     std::wstring jsonString = cRequestJson.serialize();
 
     COPYDATASTRUCT cds;
@@ -194,14 +193,13 @@ HRESULT CStockExecutorDlg::OnButtonCancel(IHTMLElement* /*pElement*/)
 void CStockExecutorDlg::OnConnect()
 {
     web::json::value cRequestModel = web::json::value::parse(m_strData);
-
-    const char* szId = cks::StringUtil::wctoc(cRequestModel.at(L"id").as_string().c_str());
-    const char* szPw = cks::StringUtil::wctoc(cRequestModel.at(L"pw").as_string().c_str());
-    const char* szCertPw = cks::StringUtil::wctoc(cRequestModel.at(L"certPw").as_string().c_str());
+    CStringA strId(cRequestModel.at(L"id").as_string().c_str());
+    CStringA strPw(cRequestModel.at(L"pw").as_string().c_str());
+    CStringA strCertPw(cRequestModel.at(L"certPw").as_string().c_str());
 
     //접속 및 로그인
     //매체코드는 특별한 경우를 제외하고 항상 아래 기본값을 사용하시기 바랍니다.
-    m_wmca.Connect(GetSafeHwnd(), CA_WMCAEVENT, 'T', 'W', szId, szPw, szCertPw);	//Namuh OpenAPI 사용자용
+    m_wmca.Connect(GetSafeHwnd(), CA_WMCAEVENT, 'T', 'W', strId, strPw, strCertPw);	//Namuh OpenAPI 사용자용
 }
 
 //━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━

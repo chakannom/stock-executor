@@ -14,9 +14,10 @@ public:
     void OnWmReceiveComplete(OUTDATABLOCK* pOutData);
     void OnWmReceiveError(OUTDATABLOCK* pError);
 private:
-    web::json::value responseJson = web::json::value::object();
+    web::json::value resJson = web::json::value::object();
     bool onlyDisconnect = true;
 
+    void processMessage(std::function<void()> generateMessage);
     void clearResponseJson();
 };
 

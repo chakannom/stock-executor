@@ -37,9 +37,6 @@
     <Filter Include="리소스 파일\release">
       <UniqueIdentifier>{11384aaf-431e-4cd5-80c8-5df94d80f540}</UniqueIdentifier>
     </Filter>
-    <Filter Include="헤더 파일\util">
-      <UniqueIdentifier>{bed8e872-880c-4056-8a52-aa3aafd82535}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="res\stockexecutor.rc2">
@@ -92,9 +89,6 @@
     </ClInclude>
     <ClInclude Include="src\helper\stock_msg_event.h">
       <Filter>헤더 파일\helper</Filter>
-    </ClInclude>
-    <ClInclude Include="src\util\string_util.h">
-      <Filter>헤더 파일\util</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

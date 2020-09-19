@@ -137,18 +137,23 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile>
+      </PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>$(VcpkgRoot)\installed\x86-windows\include;$(SolutionDir)\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>$(VcpkgRoot)\installed\x86-windows\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <Midl>
       <MkTypLibCompatible>false</MkTypLibCompatible>
@@ -211,7 +216,6 @@
     <ClInclude Include="src\helper\wmca_intf.h" />
     <ClInclude Include="src\helper\wmca_msg_event.h" />
     <ClInclude Include="src\stock-executor.h" />
-    <ClInclude Include="src\util\string_util.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\dialog\about-dlg.cpp" />

@@ -1,7 +1,9 @@
 #define UNICODE
 #include "core/framework.h"
 #include "wmca_intf.h"
-#include "wmca_msg_event.h"
+#include "wmca_msg_receiver.h"
+
+#pragma warning(disable: 4996)
 
 //━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 //	구조체 필드값을 문자열 형태로 변환하는 유틸리티 함수입니다.
@@ -10,29 +12,29 @@ CStringA _scopy_a(const char* szData, int nSize)
 {
     char szBuf[512]; //필드의 최대 크기는 상황에 따라 조절할 필요가 있음
     memset(szBuf, 0, sizeof szBuf);
-    strncpy_s(szBuf, szData, nSize);
+    strncpy(szBuf, szData, nSize);
 
     return szBuf;
 }
 
 #define SCOPY_A(x) _scopy_a(x, sizeof x)
 
-void CWmcaMsgEvent::OnWmConnected(LOGINBLOCK* pLogin) {
+
+void CWmcaMsgReceiver::Connected(LOGINBLOCK* pLogin) {
     auto generateMessage = [this, pLogin]() {
         resJson[L"code"] = web::json::value::string(L"00000");
         resJson[L"message"] = web::json::value::string(L"Connected.");
         resJson[L"data"] = web::json::value::object();
 
-        // 접속시간
+        // data.connectedDate: 접속시간
         uint64_t connectedDate = strtoull(SCOPY_A(pLogin->pLoginInfo->szDate), nullptr, 10);
         resJson[L"data"][L"connectedDate"] = web::json::value::number(connectedDate);
 
-        // 접속자ID
+        // data.username: 접속자ID
         CStringW username(SCOPY_A(pLogin->pLoginInfo->szUserID).TrimRight());
-        //wchar_t* pwszUsername = cks::StringUtil::mbtowc(pLogin->pLoginInfo->szUserID, sizeof pLogin->pLoginInfo->szUserID);
         resJson[L"data"][L"username"] = web::json::value::string(username.GetBuffer());
 
-        // 계좌목록
+        // data.accounts: 계좌목록
         resJson[L"data"][L"accounts"] = web::json::value::array();
         int	nAccountCount = atoi(SCOPY_A(pLogin->pLoginInfo->szAccountCount));
         for (int i = 0; i < nAccountCount; i++) {
@@ -48,7 +50,7 @@ void CWmcaMsgEvent::OnWmConnected(LOGINBLOCK* pLogin) {
     processMessage(generateMessage);
 }
 
-void CWmcaMsgEvent::OnWmDisconnected() {
+void CWmcaMsgReceiver::Disconnected() {
     auto generateMessage = [this]() {
         if (onlyDisconnect) {
             resJson[L"code"] = web::json::value::string(L"00000");
@@ -60,19 +62,19 @@ void CWmcaMsgEvent::OnWmDisconnected() {
     onlyDisconnect = true;
 }
 
-void CWmcaMsgEvent::OnWmSocketError(int socketErrorCode) {
+void CWmcaMsgReceiver::SocketError(int socketErrorCode) {
 
 }
 
-void CWmcaMsgEvent::OnWmReceiveData(OUTDATABLOCK* pOutData) {
+void CWmcaMsgReceiver::ReceiveData(OUTDATABLOCK* pOutData) {
 
 }
 
-void CWmcaMsgEvent::OnWmReceiveSise(OUTDATABLOCK* pSiseData) {
+void CWmcaMsgReceiver::ReceiveSise(OUTDATABLOCK* pSiseData) {
 
 }
 
-void CWmcaMsgEvent::OnWmReceiveMessage(OUTDATABLOCK* pMessage) {
+void CWmcaMsgReceiver::ReceiveMessage(OUTDATABLOCK* pMessage) {
     // 현재 상태를 문자열 형태로 출력함
     MSGHEADER* pMsgHeader = (MSGHEADER*)pMessage->pData->szData;
     CStringA code = SCOPY_A(pMsgHeader->msg_cd);
@@ -88,15 +90,15 @@ void CWmcaMsgEvent::OnWmReceiveMessage(OUTDATABLOCK* pMessage) {
     }
 }
 
-void CWmcaMsgEvent::OnWmReceiveComplete(OUTDATABLOCK* pOutData) {
+void CWmcaMsgReceiver::ReceiveComplete(OUTDATABLOCK* pOutData) {
 
 }
 
-void CWmcaMsgEvent::OnWmReceiveError(OUTDATABLOCK* pError) {
+void CWmcaMsgReceiver::ReceiveError(OUTDATABLOCK* pError) {
 
 }
 
-void CWmcaMsgEvent::processMessage(std::function<void()> generateMessage)
+void CWmcaMsgReceiver::processMessage(std::function<void()> generateMessage)
 {
 
     //HWND hWnd = FindWindow(0, L"STOCK-AGENT_STOCK-SERVICE-HELPER");
@@ -114,7 +116,7 @@ void CWmcaMsgEvent::processMessage(std::function<void()> generateMessage)
     clearResponseJson();
 }
 
-void CWmcaMsgEvent::clearResponseJson() {
+void CWmcaMsgReceiver::clearResponseJson() {
     if (resJson.has_field(L"code")) {
         resJson.erase(L"code");
     }

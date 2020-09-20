@@ -19,6 +19,7 @@
 BEGIN_DHTML_EVENT_MAP(CStockExecutorDlg)
     DHTML_EVENT_ONCLICK(_T("ButtonConnect"), OnButtonConnect)
     DHTML_EVENT_ONCLICK(_T("ButtonDisconnect"), OnButtonDIsconnect)
+    DHTML_EVENT_ONCLICK(_T("ButtonInquireCurrentPrice"), OnButtonInquireCurrentPrice)
     DHTML_EVENT_ONCLICK(_T("ButtonOK"), OnButtonOK)
     DHTML_EVENT_ONCLICK(_T("ButtonCancel"), OnButtonCancel)
 END_DHTML_EVENT_MAP()
@@ -42,6 +43,7 @@ BEGIN_MESSAGE_MAP(CStockExecutorDlg, CDHtmlDialog)
     // for Executor
     ON_BN_CLICKED(IDC_BTN_CONNECT, OnConnect)
     ON_BN_CLICKED(IDC_BTN_DISCONNECT, OnDisconnect)
+    ON_BN_CLICKED(IDC_BTN_INQUIRECURRENTPRICE, OnInquireCurrentPrice)
 
     // for WmcaEvent
     ON_MESSAGE(CA_WMCAEVENT, OnWmcaEvent)
@@ -105,7 +107,7 @@ BOOL CStockExecutorDlg::OnCopyData(CWnd* pWnd, COPYDATASTRUCT* pCopyDataStruct)
     switch (pCopyDataStruct->dwData) {
     case WM_STOCK_EXECUTOR_SETSTRINGVARIABLE:
     {
-        m_strData = (LPCTSTR)pCopyDataStruct->lpData;
+        m_wmcaMsgSender.m_strData = (LPCTSTR)pCopyDataStruct->lpData;
         break;
     }
     default:
@@ -176,6 +178,25 @@ HRESULT CStockExecutorDlg::OnButtonDIsconnect(IHTMLElement* /*pElement*/)
     return S_OK;
 }
 
+HRESULT CStockExecutorDlg::OnButtonInquireCurrentPrice(IHTMLElement* /*pElement*/)
+{
+    web::json::value cRequestJson;
+    // u must modify 
+    //cRequestJson[L"id"] = web::json::value::string(L"id");
+    //cRequestJson[L"pw"] = web::json::value::string(L"pw");
+    //cRequestJson[L"certPw"] = web::json::value::string(L"certPw");
+    std::wstring jsonString = cRequestJson.serialize();
+
+    COPYDATASTRUCT cds;
+    cds.dwData = WM_STOCK_EXECUTOR_SETSTRINGVARIABLE;
+    cds.cbData = jsonString.size();
+    cds.lpData = (PVOID)jsonString.c_str();
+
+    SendMessage(WM_COPYDATA, 0, (LPARAM)&cds);
+    SendMessage(WM_COMMAND, IDC_BTN_INQUIRECURRENTPRICE, 0);
+    return S_OK;
+}
+
 HRESULT CStockExecutorDlg::OnButtonOK(IHTMLElement* /*pElement*/)
 {
     OnOK();
@@ -191,20 +212,19 @@ HRESULT CStockExecutorDlg::OnButtonCancel(IHTMLElement* /*pElement*/)
 //━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 void CStockExecutorDlg::OnConnect()
 {
-    web::json::value cRequestModel = web::json::value::parse(m_strData);
-    CStringA strId(cRequestModel.at(L"id").as_string().c_str());
-    CStringA strPw(cRequestModel.at(L"pw").as_string().c_str());
-    CStringA strCertPw(cRequestModel.at(L"certPw").as_string().c_str());
-
-    //접속 및 로그인
-    //매체코드는 특별한 경우를 제외하고 항상 아래 기본값을 사용하시기 바랍니다.
-    m_wmca.Connect(GetSafeHwnd(), CA_WMCAEVENT, 'T', 'W', strId, strPw, strCertPw);	//Namuh OpenAPI 사용자용
+    m_wmcaMsgSender.Connect(GetSafeHwnd());
 }
 
 //━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 void CStockExecutorDlg::OnDisconnect()
 {
-    m_wmca.Disconnect();
+    m_wmcaMsgSender.Disconnect();
+}
+
+//━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+void CStockExecutorDlg::OnInquireCurrentPrice()
+{
+    m_wmcaMsgSender.InquireCurrentPrice(GetSafeHwnd());
 }
 
 //━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -214,28 +234,28 @@ LRESULT CStockExecutorDlg::OnWmcaEvent(WPARAM dwMessageType, LPARAM lParam)
 {
     switch (dwMessageType) {
     case CA_CONNECTED:          //로그인 성공
-        m_wmcaMsgEvent.OnWmConnected((LOGINBLOCK*)lParam);
+        m_wmcaMsgReceiver.Connected((LOGINBLOCK*)lParam);
         break;
     case CA_DISCONNECTED:       //접속 끊김
-        m_wmcaMsgEvent.OnWmDisconnected();
+        m_wmcaMsgReceiver.Disconnected();
         break;
     case CA_SOCKETERROR:        //통신 오류 발생
-        m_wmcaMsgEvent.OnWmSocketError((int)lParam);
+        m_wmcaMsgReceiver.SocketError((int)lParam);
         break;
     case CA_RECEIVEDATA:        //서비스 응답 수신(TR)
-        m_wmcaMsgEvent.OnWmReceiveData((OUTDATABLOCK*)lParam);
+        m_wmcaMsgReceiver.ReceiveData((OUTDATABLOCK*)lParam);
         break;
     case CA_RECEIVESISE:        //실시간 데이터 수신(BC)
-        m_wmcaMsgEvent.OnWmReceiveSise((OUTDATABLOCK*)lParam);
+        m_wmcaMsgReceiver.ReceiveSise((OUTDATABLOCK*)lParam);
         break;
     case CA_RECEIVEMESSAGE:     //상태 메시지 수신 (입력값이 잘못되었을 경우 문자열형태로 설명이 수신됨)
-        m_wmcaMsgEvent.OnWmReceiveMessage((OUTDATABLOCK*)lParam);
+        m_wmcaMsgReceiver.ReceiveMessage((OUTDATABLOCK*)lParam);
         break;
     case CA_RECEIVECOMPLETE:    //서비스 처리 완료
-        m_wmcaMsgEvent.OnWmReceiveComplete((OUTDATABLOCK*)lParam);
+        m_wmcaMsgReceiver.ReceiveComplete((OUTDATABLOCK*)lParam);
         break;
     case CA_RECEIVEERROR:       //서비스 처리중 오류 발생 (입력값 오류등)
-        m_wmcaMsgEvent.OnWmReceiveError((OUTDATABLOCK*)lParam);
+        m_wmcaMsgReceiver.ReceiveError((OUTDATABLOCK*)lParam);
         break;
     default:
         break;

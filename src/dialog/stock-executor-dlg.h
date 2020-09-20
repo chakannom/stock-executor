@@ -4,8 +4,8 @@
 
 #include <string>
 
-#include "helper/wmca_intf.h"
-#include "helper/wmca_msg_event.h"
+#include "helper/wmca_msg_sender.h"
+#include "helper/wmca_msg_receiver.h"
 #include "helper/stock_msg_event.h"
 
 // CStockExecutorDlg 대화 상자
@@ -25,14 +25,13 @@ public:
     // Action functions for debugging
     HRESULT OnButtonConnect(IHTMLElement* pElement);
     HRESULT OnButtonDIsconnect(IHTMLElement* pElement);
+    HRESULT OnButtonInquireCurrentPrice(IHTMLElement* pElement);
     HRESULT OnButtonOK(IHTMLElement *pElement);
     HRESULT OnButtonCancel(IHTMLElement *pElement);
 
 // 구현입니다.
 protected:
     HICON m_hIcon;
-    CWmcaIntf m_wmca;
-    std::wstring m_strData;
 
     // 생성된 메시지 맵 함수
     virtual BOOL OnInitDialog();
@@ -44,13 +43,15 @@ protected:
     // Executor functions
     afx_msg void OnConnect();
     afx_msg void OnDisconnect();
+    afx_msg void OnInquireCurrentPrice();
 
-    // Wmca functions
+    // Wmca function
     afx_msg LRESULT OnWmcaEvent(WPARAM wParam, LPARAM lParam);
 
     DECLARE_MESSAGE_MAP()
     DECLARE_DHTML_EVENT_MAP()
 
 private:
-    CWmcaMsgEvent m_wmcaMsgEvent;
+    CWmcaMsgSender m_wmcaMsgSender;
+    CWmcaMsgReceiver m_wmcaMsgReceiver;
 };

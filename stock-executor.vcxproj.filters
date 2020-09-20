@@ -78,9 +78,6 @@
     <ClInclude Include="src\helper\wmca_intf.h">
       <Filter>헤더 파일\helper</Filter>
     </ClInclude>
-    <ClInclude Include="src\helper\wmca_msg_event.h">
-      <Filter>헤더 파일\helper</Filter>
-    </ClInclude>
     <ClInclude Include="src\dialog\stock-executor-dlg.h">
       <Filter>헤더 파일\dialog</Filter>
     </ClInclude>
@@ -88,6 +85,18 @@
       <Filter>헤더 파일\dialog</Filter>
     </ClInclude>
     <ClInclude Include="src\helper\stock_msg_event.h">
+      <Filter>헤더 파일\helper</Filter>
+    </ClInclude>
+    <ClInclude Include="src\helper\trio_ord.h">
+      <Filter>헤더 파일\helper</Filter>
+    </ClInclude>
+    <ClInclude Include="src\helper\trio_inv.h">
+      <Filter>헤더 파일\helper</Filter>
+    </ClInclude>
+    <ClInclude Include="src\helper\wmca_msg_sender.h">
+      <Filter>헤더 파일\helper</Filter>
+    </ClInclude>
+    <ClInclude Include="src\helper\wmca_msg_receiver.h">
       <Filter>헤더 파일\helper</Filter>
     </ClInclude>
   </ItemGroup>
@@ -98,9 +107,6 @@
     <ClCompile Include="src\helper\wmca_intf.cpp">
       <Filter>소스 파일\helper</Filter>
     </ClCompile>
-    <ClCompile Include="src\helper\wmca_msg_event.cpp">
-      <Filter>소스 파일\helper</Filter>
-    </ClCompile>
     <ClCompile Include="src\dialog\stock-executor-dlg.cpp">
       <Filter>소스 파일\dialog</Filter>
     </ClCompile>
@@ -108,6 +114,12 @@
       <Filter>소스 파일\dialog</Filter>
     </ClCompile>
     <ClCompile Include="src\helper\stock_msg_event.cpp">
+      <Filter>소스 파일\helper</Filter>
+    </ClCompile>
+    <ClCompile Include="src\helper\wmca_msg_sender.cpp">
+      <Filter>소스 파일\helper</Filter>
+    </ClCompile>
+    <ClCompile Include="src\helper\wmca_msg_receiver.cpp">
       <Filter>소스 파일\helper</Filter>
     </ClCompile>
   </ItemGroup>

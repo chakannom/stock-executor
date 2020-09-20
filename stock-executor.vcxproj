@@ -213,16 +213,20 @@
     <ClInclude Include="src\dialog\about-dlg.h" />
     <ClInclude Include="src\dialog\stock-executor-dlg.h" />
     <ClInclude Include="src\helper\stock_msg_event.h" />
+    <ClInclude Include="src\helper\trio_inv.h" />
+    <ClInclude Include="src\helper\trio_ord.h" />
+    <ClInclude Include="src\helper\wmca_msg_sender.h" />
     <ClInclude Include="src\helper\wmca_intf.h" />
-    <ClInclude Include="src\helper\wmca_msg_event.h" />
+    <ClInclude Include="src\helper\wmca_msg_receiver.h" />
     <ClInclude Include="src\stock-executor.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\dialog\about-dlg.cpp" />
     <ClCompile Include="src\dialog\stock-executor-dlg.cpp" />
     <ClCompile Include="src\helper\stock_msg_event.cpp" />
+    <ClCompile Include="src\helper\wmca_msg_sender.cpp" />
     <ClCompile Include="src\helper\wmca_intf.cpp" />
-    <ClCompile Include="src\helper\wmca_msg_event.cpp" />
+    <ClCompile Include="src\helper\wmca_msg_receiver.cpp" />
     <ClCompile Include="src\stock-executor.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

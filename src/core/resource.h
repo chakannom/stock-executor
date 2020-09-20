@@ -11,6 +11,7 @@
 // for Executor
 #define IDC_BTN_CONNECT                 1000
 #define IDC_BTN_DISCONNECT              1001
+#define IDC_BTN_INQUIRECURRENTPRICE     1002
 
 // Next default values for new objects
 // 

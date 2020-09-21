@@ -13,6 +13,7 @@ public:
     void ReceiveMessage(OUTDATABLOCK* pMessage);
     void ReceiveComplete(OUTDATABLOCK* pOutData);
     void ReceiveError(OUTDATABLOCK* pError);
+    void ConnectedStatus(BOOL isConnected);
 private:
     web::json::value resJson = web::json::value::object();
     bool onlyDisconnect = true;

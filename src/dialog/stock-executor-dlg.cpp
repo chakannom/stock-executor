@@ -18,7 +18,8 @@
 
 BEGIN_DHTML_EVENT_MAP(CStockExecutorDlg)
     DHTML_EVENT_ONCLICK(_T("ButtonConnect"), OnButtonConnect)
-    DHTML_EVENT_ONCLICK(_T("ButtonDisconnect"), OnButtonDIsconnect)
+    DHTML_EVENT_ONCLICK(_T("ButtonDisconnect"), OnButtonDisconnect)
+    DHTML_EVENT_ONCLICK(_T("ButtonIsConnected"), OnButtonIsConnected)
     DHTML_EVENT_ONCLICK(_T("ButtonInquireCurrentPrice"), OnButtonInquireCurrentPrice)
     DHTML_EVENT_ONCLICK(_T("ButtonOK"), OnButtonOK)
     DHTML_EVENT_ONCLICK(_T("ButtonCancel"), OnButtonCancel)
@@ -43,6 +44,7 @@ BEGIN_MESSAGE_MAP(CStockExecutorDlg, CDHtmlDialog)
     // for Executor
     ON_BN_CLICKED(IDC_BTN_CONNECT, OnConnect)
     ON_BN_CLICKED(IDC_BTN_DISCONNECT, OnDisconnect)
+    ON_BN_CLICKED(IDC_BTN_ISCONNECTED, OnIsConnected)
     ON_BN_CLICKED(IDC_BTN_INQUIRECURRENTPRICE, OnInquireCurrentPrice)
 
     // for WmcaEvent
@@ -172,19 +174,22 @@ HRESULT CStockExecutorDlg::OnButtonConnect(IHTMLElement* /*pElement*/)
     return S_OK;
 }
 
-HRESULT CStockExecutorDlg::OnButtonDIsconnect(IHTMLElement* /*pElement*/)
+HRESULT CStockExecutorDlg::OnButtonDisconnect(IHTMLElement* /*pElement*/)
 {
     SendMessage(WM_COMMAND, IDC_BTN_DISCONNECT, 0);
+    return S_OK;
+}
+
+HRESULT CStockExecutorDlg::OnButtonIsConnected(IHTMLElement* /*pElement*/)
+{
+    SendMessage(WM_COMMAND, IDC_BTN_ISCONNECTED, 0);
     return S_OK;
 }
 
 HRESULT CStockExecutorDlg::OnButtonInquireCurrentPrice(IHTMLElement* /*pElement*/)
 {
     web::json::value cRequestJson;
-    // u must modify 
-    //cRequestJson[L"id"] = web::json::value::string(L"id");
-    //cRequestJson[L"pw"] = web::json::value::string(L"pw");
-    //cRequestJson[L"certPw"] = web::json::value::string(L"certPw");
+    cRequestJson[L"code"] = web::json::value::string(L"005940"); //NH투자증권 코드(005940)
     std::wstring jsonString = cRequestJson.serialize();
 
     COPYDATASTRUCT cds;
@@ -219,6 +224,13 @@ void CStockExecutorDlg::OnConnect()
 void CStockExecutorDlg::OnDisconnect()
 {
     m_wmcaMsgSender.Disconnect();
+}
+
+//━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+void CStockExecutorDlg::OnIsConnected()
+{
+    BOOL isConnected = m_wmcaMsgSender.IsConnected();
+    m_wmcaMsgReceiver.ConnectedStatus(isConnected);
 }
 
 //━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━

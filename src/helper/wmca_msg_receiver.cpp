@@ -1,26 +1,13 @@
 #define UNICODE
 #include "core/framework.h"
+#include "util/string_util.h"
+#include "trio_def.h"
+#include "trio_inv.h"
 #include "wmca_intf.h"
 #include "wmca_msg_receiver.h"
 
-#pragma warning(disable: 4996)
-
-//━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-//	구조체 필드값을 문자열 형태로 변환하는 유틸리티 함수입니다.
-//━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-CStringA _scopy_a(const char* szData, int nSize)
+void CWmcaMsgReceiver::Connected(LOGINBLOCK* pLogin)
 {
-    char szBuf[512]; //필드의 최대 크기는 상황에 따라 조절할 필요가 있음
-    memset(szBuf, 0, sizeof szBuf);
-    strncpy(szBuf, szData, nSize);
-
-    return szBuf;
-}
-
-#define SCOPY_A(x) _scopy_a(x, sizeof x)
-
-
-void CWmcaMsgReceiver::Connected(LOGINBLOCK* pLogin) {
     auto generateMessage = [this, pLogin]() {
         resJson[L"code"] = web::json::value::string(L"00000");
         resJson[L"message"] = web::json::value::string(L"Connected.");
@@ -40,8 +27,10 @@ void CWmcaMsgReceiver::Connected(LOGINBLOCK* pLogin) {
         for (int i = 0; i < nAccountCount; i++) {
             ACCOUNTINFO* pAccountInfo = &(pLogin->pLoginInfo->accountlist[i]);
             resJson[L"data"][L"accounts"][i] = web::json::value::object();
+            // data.accounts.name: 계좌명
             CStringW accountName(SCOPY_A(pAccountInfo->szAccountName).TrimRight());
             resJson[L"data"][L"accounts"][i][L"name"] = web::json::value::string(accountName.GetBuffer());
+            // data.accounts.name: 계좌번호
             CStringW accountNo(SCOPY_A(pAccountInfo->szAccountNo).TrimRight());
             resJson[L"data"][L"accounts"][i][L"number"] = web::json::value::string(accountNo.GetBuffer());
         }
@@ -50,7 +39,8 @@ void CWmcaMsgReceiver::Connected(LOGINBLOCK* pLogin) {
     processMessage(generateMessage);
 }
 
-void CWmcaMsgReceiver::Disconnected() {
+void CWmcaMsgReceiver::Disconnected()
+{
     auto generateMessage = [this]() {
         if (onlyDisconnect) {
             resJson[L"code"] = web::json::value::string(L"00000");
@@ -62,19 +52,60 @@ void CWmcaMsgReceiver::Disconnected() {
     onlyDisconnect = true;
 }
 
-void CWmcaMsgReceiver::SocketError(int socketErrorCode) {
+void CWmcaMsgReceiver::SocketError(int socketErrorCode)
+{
 
 }
 
-void CWmcaMsgReceiver::ReceiveData(OUTDATABLOCK* pOutData) {
+void CWmcaMsgReceiver::ReceiveData(OUTDATABLOCK* pOutData)
+{
+    switch (pOutData->TrIndex) {
+    case TRID_c1101:
+        //////////////////////////////////////////////////////////////////////////
+        //반복되지 않는 단순출력 처리 방식
+        //////////////////////////////////////////////////////////////////////////
+
+        if (strcmp(pOutData->pData->szBlockName, "c1101OutBlock") == 0) {
+            // Information // 주식현재가조회 - 현재가
+            Tc1101OutBlock* pc1101Outblock = (Tc1101OutBlock*)pOutData->pData->szData;
+
+            CStringW code(SCOPY_A(pc1101Outblock->code));
+            CStringW hname(SCOPY_A(pc1101Outblock->hname));
+            CStringW sosokz6(SCOPY_A(pc1101Outblock->sosokz6));
+            CStringW jisunamez18(SCOPY_A(pc1101Outblock->jisunamez18));
+            CStringW price(COMMA_A(pc1101Outblock->price));
+        }
+        //////////////////////////////////////////////////////////////////////////
+        //반복가능한 출력에 대한 처리 방식
+        //////////////////////////////////////////////////////////////////////////
+
+        //주식 현재가/변동거래량자료	
+        if (strcmp(pOutData->pData->szBlockName, "c1101OutBlock2") == 0) {
+            // 주식현재가조회 - 변동거래량
+            Tc1101OutBlock2* pc1101Outblock2 = (Tc1101OutBlock2*)pOutData->pData->szData;
+
+            //실제 데이터에 따라 수신 데이터 행의 수가 가변적이므로
+            //수신자료 크기를 구조체 크기로 나누어 몇 번 반복되는지 계산함
+            int nOccursCount = pOutData->pData->nLen / sizeof(Tc1101OutBlock2);    //반복 회수를 구함
+
+            for (int i = 0; i < nOccursCount; i++) { //회수만큼 반복하면서 데이터 구함
+                CStringW time(SCOPY_A(pc1101Outblock2->time));
+                CStringW price(COMMA_A(pc1101Outblock2->price));
+
+                pc1101Outblock2++;    //다음행으로 포인터 이동
+            }
+        }
+        break;
+    }
+}
+
+void CWmcaMsgReceiver::ReceiveSise(OUTDATABLOCK* pSiseData)
+{
 
 }
 
-void CWmcaMsgReceiver::ReceiveSise(OUTDATABLOCK* pSiseData) {
-
-}
-
-void CWmcaMsgReceiver::ReceiveMessage(OUTDATABLOCK* pMessage) {
+void CWmcaMsgReceiver::ReceiveMessage(OUTDATABLOCK* pMessage)
+{
     // 현재 상태를 문자열 형태로 출력함
     MSGHEADER* pMsgHeader = (MSGHEADER*)pMessage->pData->szData;
     CStringA code = SCOPY_A(pMsgHeader->msg_cd);
@@ -90,17 +121,30 @@ void CWmcaMsgReceiver::ReceiveMessage(OUTDATABLOCK* pMessage) {
     }
 }
 
-void CWmcaMsgReceiver::ReceiveComplete(OUTDATABLOCK* pOutData) {
+void CWmcaMsgReceiver::ReceiveComplete(OUTDATABLOCK* pOutData) 
+{
+    auto generateMessage = [this]() {
+    };
+
+    processMessage(generateMessage);
+}
+
+void CWmcaMsgReceiver::ReceiveError(OUTDATABLOCK* pError)
+{
 
 }
 
-void CWmcaMsgReceiver::ReceiveError(OUTDATABLOCK* pError) {
+void CWmcaMsgReceiver::ConnectedStatus(BOOL isConnected)
+{
+    auto generateMessage = [this, isConnected]() {
+        resJson[L"status"] = web::json::value::boolean(isConnected != FALSE);
+    };
 
+    processMessage(generateMessage);
 }
 
 void CWmcaMsgReceiver::processMessage(std::function<void()> generateMessage)
 {
-
     //HWND hWnd = FindWindow(0, L"STOCK-AGENT_STOCK-SERVICE-HELPER");
     //if (hWnd == NULL) return;
 
@@ -116,7 +160,8 @@ void CWmcaMsgReceiver::processMessage(std::function<void()> generateMessage)
     clearResponseJson();
 }
 
-void CWmcaMsgReceiver::clearResponseJson() {
+void CWmcaMsgReceiver::clearResponseJson()
+{
     if (resJson.has_field(L"code")) {
         resJson.erase(L"code");
     }
@@ -125,5 +170,8 @@ void CWmcaMsgReceiver::clearResponseJson() {
     }
     if (resJson.has_field(L"data")) {
         resJson.erase(L"data");
+    }
+    if (resJson.has_field(L"status")) {
+        resJson.erase(L"status");
     }
 }

@@ -13,6 +13,7 @@ public:
 
     void Connect(HWND hWnd);
     void Disconnect();
+    BOOL IsConnected();
     void InquireCurrentPrice(HWND hWnd);
 private:
     CWmcaIntf m_wmca;

@@ -25,8 +25,8 @@ void CWmcaMsgReceiver::Connected(LOGINBLOCK* pLogin)
         resJson[L"data"][L"accounts"] = web::json::value::array();
         int	nAccountCount = atoi(SCOPY_A(pLogin->pLoginInfo->szAccountCount));
         for (int i = 0; i < nAccountCount; i++) {
-            ACCOUNTINFO* pAccountInfo = &(pLogin->pLoginInfo->accountlist[i]);
             resJson[L"data"][L"accounts"][i] = web::json::value::object();
+            ACCOUNTINFO* pAccountInfo = &(pLogin->pLoginInfo->accountlist[i]);
             // data.accounts.name: 계좌명
             CStringW accountName(SCOPY_A(pAccountInfo->szAccountName).TrimRight());
             resJson[L"data"][L"accounts"][i][L"name"] = web::json::value::string(accountName.GetBuffer());
@@ -61,27 +61,32 @@ void CWmcaMsgReceiver::ReceiveData(OUTDATABLOCK* pOutData)
 {
     switch (pOutData->TrIndex) {
     case TRID_c1101:
-        //////////////////////////////////////////////////////////////////////////
-        //반복되지 않는 단순출력 처리 방식
-        //////////////////////////////////////////////////////////////////////////
-
+        //주식 현재가/종목정보	
         if (strcmp(pOutData->pData->szBlockName, "c1101OutBlock") == 0) {
-            // Information // 주식현재가조회 - 현재가
+            resJson[L"data"][L"information"] = web::json::value::object();
             Tc1101OutBlock* pc1101Outblock = (Tc1101OutBlock*)pOutData->pData->szData;
-
+            // data.information.code: 종목코드
             CStringW code(SCOPY_A(pc1101Outblock->code));
-            CStringW hname(SCOPY_A(pc1101Outblock->hname));
-            CStringW sosokz6(SCOPY_A(pc1101Outblock->sosokz6));
-            CStringW jisunamez18(SCOPY_A(pc1101Outblock->jisunamez18));
-            CStringW price(COMMA_A(pc1101Outblock->price));
+            resJson[L"data"][L"information"][L"code"] = web::json::value::string(code.GetBuffer());
+            // data.information.name: 종목명
+            CStringW name(SCOPY_A(pc1101Outblock->hname).TrimRight());
+            resJson[L"data"][L"information"][L"name"] = web::json::value::string(name.GetBuffer());
+            // data.information.price: 현재가
+            uint32_t price = strtoul(SCOPY_A(pc1101Outblock->price), nullptr, 10);
+            resJson[L"data"][L"information"][L"price"] = web::json::value::number(price);
+            // data.information.sign: 등락부호
+            CStringW sign(SCOPY_A(pc1101Outblock->sign));
+            resJson[L"data"][L"information"][L"sign"] = web::json::value::string(sign.GetBuffer());
+            // data.information.change: 등락폭
+            uint32_t change = strtoul(SCOPY_A(pc1101Outblock->change), nullptr, 10);
+            resJson[L"data"][L"information"][L"change"] = web::json::value::number(change);
+            // data.information.chrate: 등락률 -- 여기부터
         }
-        //////////////////////////////////////////////////////////////////////////
-        //반복가능한 출력에 대한 처리 방식
-        //////////////////////////////////////////////////////////////////////////
 
-        //주식 현재가/변동거래량자료	
+        //주식 현재가/변동거래량
         if (strcmp(pOutData->pData->szBlockName, "c1101OutBlock2") == 0) {
-            // 주식현재가조회 - 변동거래량
+            resJson[L"data"][L"variableVolume"] = web::json::value::array();
+
             Tc1101OutBlock2* pc1101Outblock2 = (Tc1101OutBlock2*)pOutData->pData->szData;
 
             //실제 데이터에 따라 수신 데이터 행의 수가 가변적이므로
@@ -94,6 +99,14 @@ void CWmcaMsgReceiver::ReceiveData(OUTDATABLOCK* pOutData)
 
                 pc1101Outblock2++;    //다음행으로 포인터 이동
             }
+        }
+
+        //주식 현재가/동시호가	
+        if (strcmp(pOutData->pData->szBlockName, "c1101OutBlock3") == 0) {
+            resJson[L"data"][L"simultaneousQuote"] = web::json::value::object();
+
+            Tc1101OutBlock3* pc1101Outblock3 = (Tc1101OutBlock3*)pOutData->pData->szData;
+
         }
         break;
     }
@@ -124,6 +137,8 @@ void CWmcaMsgReceiver::ReceiveMessage(OUTDATABLOCK* pMessage)
 void CWmcaMsgReceiver::ReceiveComplete(OUTDATABLOCK* pOutData) 
 {
     auto generateMessage = [this]() {
+        resJson[L"code"] = web::json::value::string(L"00000");
+        resJson[L"message"] = web::json::value::string(L"");
     };
 
     processMessage(generateMessage);
@@ -137,7 +152,10 @@ void CWmcaMsgReceiver::ReceiveError(OUTDATABLOCK* pError)
 void CWmcaMsgReceiver::ConnectedStatus(BOOL isConnected)
 {
     auto generateMessage = [this, isConnected]() {
-        resJson[L"status"] = web::json::value::boolean(isConnected != FALSE);
+        resJson[L"code"] = web::json::value::string(L"00000");
+        resJson[L"message"] = web::json::value::string(L"It checked the status.");
+        resJson[L"data"] = web::json::value::object();
+        resJson[L"data"][L"status"] = web::json::value::boolean(isConnected != FALSE);
     };
 
     processMessage(generateMessage);
@@ -170,8 +188,5 @@ void CWmcaMsgReceiver::clearResponseJson()
     }
     if (resJson.has_field(L"data")) {
         resJson.erase(L"data");
-    }
-    if (resJson.has_field(L"status")) {
-        resJson.erase(L"status");
     }
 }

@@ -263,17 +263,17 @@ void CWmcaMsgReceiver::ConnectedStatus(BOOL isConnected)
 
 void CWmcaMsgReceiver::processMessage(std::function<void()> generateMessage)
 {
-    //HWND hWnd = FindWindow(0, L"STOCK-AGENT_STOCK-SERVICE-HELPER");
-    //if (hWnd == NULL) return;
+    HWND hWnd = FindWindow(0, L"STOCK-AGENT_STOCK-SERVICE-HELPER");
+    if (hWnd == NULL) return;
 
     generateMessage();
 
     std::wstring jsonString = resJson.serialize();
-    //COPYDATASTRUCT cds;
-    //cds.dwData = WM_USER + 2001;
-    //cds.cbData = jsonString.size() * sizeof(wchar_t);
-    //cds.lpData = (PVOID)jsonString.c_str();
-    //SendMessage(hWnd, WM_COPYDATA, 0, (LPARAM)&cds);
+    COPYDATASTRUCT cds;
+    cds.dwData = WM_USER + 2001;
+    cds.cbData = jsonString.size() * sizeof(wchar_t);
+    cds.lpData = (PVOID)jsonString.c_str();
+    SendMessage(hWnd, WM_COPYDATA, 0, (LPARAM)&cds);
 
     clearResponseJson();
 }

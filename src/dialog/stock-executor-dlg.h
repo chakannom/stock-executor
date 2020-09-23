@@ -6,7 +6,6 @@
 
 #include "helper/wmca_msg_sender.h"
 #include "helper/wmca_msg_receiver.h"
-#include "helper/stock_msg_event.h"
 
 // CStockExecutorDlg 대화 상자
 class CStockExecutorDlg : public CDHtmlDialog

@@ -129,7 +129,7 @@
     <ClInclude Include="src\core\targetver.h" />
     <ClInclude Include="src\dialog\about-dlg.h" />
     <ClInclude Include="src\dialog\stock-executor-dlg.h" />
-    <ClInclude Include="src\helper\stock_msg_event.h" />
+    <ClInclude Include="src\helper\response_supporter.h" />
     <ClInclude Include="src\helper\trio_def.h" />
     <ClInclude Include="src\helper\trio_inv.h" />
     <ClInclude Include="src\helper\trio_ord.h" />
@@ -142,7 +142,7 @@
   <ItemGroup>
     <ClCompile Include="src\dialog\about-dlg.cpp" />
     <ClCompile Include="src\dialog\stock-executor-dlg.cpp" />
-    <ClCompile Include="src\helper\stock_msg_event.cpp" />
+    <ClCompile Include="src\helper\response_supporter.cpp" />
     <ClCompile Include="src\helper\wmca_msg_sender.cpp" />
     <ClCompile Include="src\helper\wmca_intf.cpp" />
     <ClCompile Include="src\helper\wmca_msg_receiver.cpp" />

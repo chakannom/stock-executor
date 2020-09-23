@@ -14,6 +14,8 @@
 #define new DEBUG_NEW
 #endif
 
+const DWORD WM_STOCK_EXECUTOR_SETSTRINGVARIABLE = WM_USER + 1001;
+
 // CStockExecutorDlg 대화 상자
 
 BEGIN_DHTML_EVENT_MAP(CStockExecutorDlg)

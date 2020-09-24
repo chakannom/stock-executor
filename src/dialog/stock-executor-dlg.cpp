@@ -17,14 +17,16 @@
 const DWORD WM_STOCK_EXECUTOR_SETSTRINGVARIABLE = WM_USER + 1001;
 
 // CStockExecutorDlg 대화 상자
-
 BEGIN_DHTML_EVENT_MAP(CStockExecutorDlg)
+#ifdef _DEBUG
+    // for debugging
     DHTML_EVENT_ONCLICK(_T("ButtonConnect"), OnButtonConnect)
     DHTML_EVENT_ONCLICK(_T("ButtonDisconnect"), OnButtonDisconnect)
     DHTML_EVENT_ONCLICK(_T("ButtonIsConnected"), OnButtonIsConnected)
     DHTML_EVENT_ONCLICK(_T("ButtonInquireCurrentPrice"), OnButtonInquireCurrentPrice)
     DHTML_EVENT_ONCLICK(_T("ButtonOK"), OnButtonOK)
     DHTML_EVENT_ONCLICK(_T("ButtonCancel"), OnButtonCancel)
+#endif
 END_DHTML_EVENT_MAP()
 
 
@@ -85,7 +87,11 @@ BOOL CStockExecutorDlg::OnInitDialog()
     SetIcon(m_hIcon, TRUE);			// 큰 아이콘을 설정합니다.
     SetIcon(m_hIcon, FALSE);		// 작은 아이콘을 설정합니다.
 
-    ShowWindow(/*SW_MINIMIZE*/SW_SHOW);
+#ifdef _DEBUG
+    ShowWindow(SW_SHOW);
+#else
+    ShowWindow(SW_MINIMIZE);
+#endif
 
     // TODO: 여기에 추가 초기화 작업을 추가합니다.
 
@@ -158,6 +164,7 @@ HCURSOR CStockExecutorDlg::OnQueryDragIcon()
     return static_cast<HCURSOR>(m_hIcon);
 }
 
+#ifdef _DEBUG
 HRESULT CStockExecutorDlg::OnButtonConnect(IHTMLElement* /*pElement*/)
 {
     web::json::value cRequestJson;
@@ -215,6 +222,7 @@ HRESULT CStockExecutorDlg::OnButtonCancel(IHTMLElement* /*pElement*/)
     OnCancel();
     return S_OK;
 }
+#endif
 
 //━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 void CStockExecutorDlg::OnConnect()

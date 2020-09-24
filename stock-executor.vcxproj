@@ -113,7 +113,7 @@
     <None Include=".gitignore" />
     <None Include="LICENSE" />
     <None Include="README.md" />
-    <None Include="res\develop\stock-executor.html" />
+    <None Include="res\debug\stock-executor.html" />
     <None Include="res\release\stock-executor.html" />
     <None Include="res\stockexecutor.rc2" />
   </ItemGroup>

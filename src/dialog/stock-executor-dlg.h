@@ -19,8 +19,10 @@ public:
     enum { IDD = IDD_STOCKEXECUTOR_DIALOG, IDH = IDR_HTML_STOCKEXECUTOR_DIALOG };
 #endif
 
-    protected:
+protected:
     virtual void DoDataExchange(CDataExchange* pDX);	// DDX/DDV 지원입니다.
+
+#ifdef _DEBUG
     // Action functions for debugging
     HRESULT OnButtonConnect(IHTMLElement* pElement);
     HRESULT OnButtonDisconnect(IHTMLElement* pElement);
@@ -28,6 +30,7 @@ public:
     HRESULT OnButtonInquireCurrentPrice(IHTMLElement* pElement);
     HRESULT OnButtonOK(IHTMLElement *pElement);
     HRESULT OnButtonCancel(IHTMLElement *pElement);
+#endif
 
 // 구현입니다.
 protected:

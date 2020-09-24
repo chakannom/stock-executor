@@ -31,14 +31,14 @@
     <Filter Include="헤더 파일\dialog">
       <UniqueIdentifier>{6e6072f7-058a-47d1-a6fe-d234ab684301}</UniqueIdentifier>
     </Filter>
-    <Filter Include="리소스 파일\develop">
-      <UniqueIdentifier>{dd020d2c-48b3-4880-8a97-7045eb82899f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="리소스 파일\release">
       <UniqueIdentifier>{11384aaf-431e-4cd5-80c8-5df94d80f540}</UniqueIdentifier>
     </Filter>
     <Filter Include="헤더 파일\util">
       <UniqueIdentifier>{833c2f18-cbad-443f-97a5-1424852e2e28}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="리소스 파일\debug">
+      <UniqueIdentifier>{dd020d2c-48b3-4880-8a97-7045eb82899f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -48,11 +48,11 @@
     <None Include=".gitignore" />
     <None Include="README.md" />
     <None Include="LICENSE" />
-    <None Include="res\develop\stock-executor.html">
-      <Filter>리소스 파일\develop</Filter>
-    </None>
     <None Include="res\release\stock-executor.html">
       <Filter>리소스 파일\release</Filter>
+    </None>
+    <None Include="res\debug\stock-executor.html">
+      <Filter>리소스 파일\debug</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

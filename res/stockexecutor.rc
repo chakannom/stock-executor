@@ -105,10 +105,13 @@ END
 // HTML
 //
 
-// for Develop
-IDR_HTML_STOCKEXECUTOR_DIALOG HTML                    "develop\\stock-executor.html"
+// for Debug
+#ifdef _DEBUG
+IDR_HTML_STOCKEXECUTOR_DIALOG HTML                    "debug\\stock-executor.html"
+#else
 // for Release
-//IDR_HTML_STOCKEXECUTOR_DIALOG HTML                    "release\\stock-executor.html"
+IDR_HTML_STOCKEXECUTOR_DIALOG HTML                    "release\\stock-executor.html"
+#endif
 
 /////////////////////////////////////////////////////////////////////////////
 //

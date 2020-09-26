@@ -167,11 +167,11 @@ HCURSOR CStockExecutorDlg::OnQueryDragIcon()
 #ifdef _DEBUG
 HRESULT CStockExecutorDlg::OnButtonConnect(IHTMLElement* /*pElement*/)
 {
-    web::json::value cRequestJson;
-    cRequestJson[L"id"] = web::json::value::string(L"id");
-    cRequestJson[L"pw"] = web::json::value::string(L"pw");
-    cRequestJson[L"certPw"] = web::json::value::string(L"certPw");
-    std::wstring jsonString = cRequestJson.serialize();
+    web::json::value requestJson;
+    requestJson[L"id"] = web::json::value::string(L"id");
+    requestJson[L"pw"] = web::json::value::string(L"pw");
+    requestJson[L"certPw"] = web::json::value::string(L"certPw");
+    std::wstring jsonString = requestJson.serialize();
 
     COPYDATASTRUCT cds;
     cds.dwData = WM_STOCK_EXECUTOR_SETSTRINGVARIABLE;
@@ -197,9 +197,9 @@ HRESULT CStockExecutorDlg::OnButtonIsConnected(IHTMLElement* /*pElement*/)
 
 HRESULT CStockExecutorDlg::OnButtonInquireCurrentPrice(IHTMLElement* /*pElement*/)
 {
-    web::json::value cRequestJson;
-    cRequestJson[L"code"] = web::json::value::string(L"005940"); //NH투자증권 코드(005940)
-    std::wstring jsonString = cRequestJson.serialize();
+    web::json::value requestJson;
+    requestJson[L"code"] = web::json::value::string(L"005940"); //NH투자증권 코드(005940)
+    std::wstring jsonString = requestJson.serialize();
 
     COPYDATASTRUCT cds;
     cds.dwData = WM_STOCK_EXECUTOR_SETSTRINGVARIABLE;

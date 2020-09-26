@@ -4,6 +4,8 @@
     <LocalDebuggerEnvironment>PATH=$(SolutionDir)\lib\nh_namu;$(VcpkgRoot)\installed\x86-windows\bin;%PATH%;
 $(LocalDebuggerEnvironment)</LocalDebuggerEnvironment>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
+    <LocalDebuggerCommandArguments>
+    </LocalDebuggerCommandArguments>
   </PropertyGroup>
   <PropertyGroup>
     <RESOURCE_FILE>res\stockexecutor.rc</RESOURCE_FILE>
@@ -12,5 +14,6 @@ $(LocalDebuggerEnvironment)</LocalDebuggerEnvironment>
     <LocalDebuggerEnvironment>PATH=$(SolutionDir)\lib\nh_namu;$(VcpkgRoot)\installed\x86-windows\bin;%PATH%;
 $(LocalDebuggerEnvironment)</LocalDebuggerEnvironment>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
+    <LocalDebuggerCommandArguments>--execute uuid</LocalDebuggerCommandArguments>
   </PropertyGroup>
 </Project>

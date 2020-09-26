@@ -87,10 +87,10 @@ BOOL CStockExecutorDlg::OnInitDialog()
     SetIcon(m_hIcon, TRUE);			// 큰 아이콘을 설정합니다.
     SetIcon(m_hIcon, FALSE);		// 작은 아이콘을 설정합니다.
 
-#ifdef _DEBUG
-    ShowWindow(SW_SHOW);
-#else
-    ShowWindow(SW_MINIMIZE);
+#ifndef _DEBUG
+    // 숨김처리 (최소화후 숨겨야 화면에 나타나지 않음)
+    ShowWindow(SW_SHOWMINIMIZED);
+    PostMessage(WM_SHOWWINDOW, FALSE, SW_OTHERUNZOOM);
 #endif
 
     // TODO: 여기에 추가 초기화 작업을 추가합니다.

@@ -23,6 +23,8 @@ public:
 // 구현입니다.
 
     DECLARE_MESSAGE_MAP()
+private:
+    BOOL PreventRunning();
 };
 
 extern CStockExecutorApp theApp;

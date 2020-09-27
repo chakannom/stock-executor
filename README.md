@@ -25,13 +25,13 @@ To optimize the stock-executor application, run:
 
 for Debugging
 ```
-...
+MSBuild.exe stock-executor.vcxproj /p:Configuration=Debug
 ```
 
 for Release
 
 ```
-...
+MSBuild.exe stock-executor.vcxproj /p:Configuration=Release
 ```
 
 To ensure everything worked, run:

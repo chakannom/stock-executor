@@ -31,14 +31,14 @@
     <Filter Include="헤더 파일\dialog">
       <UniqueIdentifier>{6e6072f7-058a-47d1-a6fe-d234ab684301}</UniqueIdentifier>
     </Filter>
-    <Filter Include="리소스 파일\develop">
-      <UniqueIdentifier>{dd020d2c-48b3-4880-8a97-7045eb82899f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="리소스 파일\release">
       <UniqueIdentifier>{11384aaf-431e-4cd5-80c8-5df94d80f540}</UniqueIdentifier>
     </Filter>
     <Filter Include="헤더 파일\util">
       <UniqueIdentifier>{833c2f18-cbad-443f-97a5-1424852e2e28}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="리소스 파일\debug">
+      <UniqueIdentifier>{dd020d2c-48b3-4880-8a97-7045eb82899f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -48,11 +48,11 @@
     <None Include=".gitignore" />
     <None Include="README.md" />
     <None Include="LICENSE" />
-    <None Include="res\develop\stock-executor.html">
-      <Filter>리소스 파일\develop</Filter>
-    </None>
     <None Include="res\release\stock-executor.html">
       <Filter>리소스 파일\release</Filter>
+    </None>
+    <None Include="res\debug\stock-executor.html">
+      <Filter>리소스 파일\debug</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -87,9 +87,6 @@
     <ClInclude Include="src\dialog\about-dlg.h">
       <Filter>헤더 파일\dialog</Filter>
     </ClInclude>
-    <ClInclude Include="src\helper\stock_msg_event.h">
-      <Filter>헤더 파일\helper</Filter>
-    </ClInclude>
     <ClInclude Include="src\helper\trio_ord.h">
       <Filter>헤더 파일\helper</Filter>
     </ClInclude>
@@ -108,6 +105,9 @@
     <ClInclude Include="src\helper\trio_def.h">
       <Filter>헤더 파일\helper</Filter>
     </ClInclude>
+    <ClInclude Include="src\helper\response_supporter.h">
+      <Filter>헤더 파일\helper</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\stock-executor.cpp">
@@ -122,13 +122,13 @@
     <ClCompile Include="src\dialog\about-dlg.cpp">
       <Filter>소스 파일\dialog</Filter>
     </ClCompile>
-    <ClCompile Include="src\helper\stock_msg_event.cpp">
-      <Filter>소스 파일\helper</Filter>
-    </ClCompile>
     <ClCompile Include="src\helper\wmca_msg_sender.cpp">
       <Filter>소스 파일\helper</Filter>
     </ClCompile>
     <ClCompile Include="src\helper\wmca_msg_receiver.cpp">
+      <Filter>소스 파일\helper</Filter>
+    </ClCompile>
+    <ClCompile Include="src\helper\response_supporter.cpp">
       <Filter>소스 파일\helper</Filter>
     </ClCompile>
   </ItemGroup>

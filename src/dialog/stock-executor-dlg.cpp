@@ -14,15 +14,19 @@
 #define new DEBUG_NEW
 #endif
 
-// CStockExecutorDlg 대화 상자
+const DWORD WM_STOCK_EXECUTOR_SETSTRINGVARIABLE = WM_USER + 1001;
 
+// CStockExecutorDlg 대화 상자
 BEGIN_DHTML_EVENT_MAP(CStockExecutorDlg)
+#ifdef _DEBUG
+    // for debugging
     DHTML_EVENT_ONCLICK(_T("ButtonConnect"), OnButtonConnect)
     DHTML_EVENT_ONCLICK(_T("ButtonDisconnect"), OnButtonDisconnect)
     DHTML_EVENT_ONCLICK(_T("ButtonIsConnected"), OnButtonIsConnected)
     DHTML_EVENT_ONCLICK(_T("ButtonInquireCurrentPrice"), OnButtonInquireCurrentPrice)
     DHTML_EVENT_ONCLICK(_T("ButtonOK"), OnButtonOK)
     DHTML_EVENT_ONCLICK(_T("ButtonCancel"), OnButtonCancel)
+#endif
 END_DHTML_EVENT_MAP()
 
 
@@ -83,7 +87,11 @@ BOOL CStockExecutorDlg::OnInitDialog()
     SetIcon(m_hIcon, TRUE);			// 큰 아이콘을 설정합니다.
     SetIcon(m_hIcon, FALSE);		// 작은 아이콘을 설정합니다.
 
-    ShowWindow(/*SW_MINIMIZE*/SW_SHOW);
+#ifndef _DEBUG
+    // 숨김처리 (최소화후 숨겨야 화면에 나타나지 않음)
+    ShowWindow(SW_SHOWMINIMIZED);
+    PostMessage(WM_SHOWWINDOW, FALSE, SW_OTHERUNZOOM);
+#endif
 
     // TODO: 여기에 추가 초기화 작업을 추가합니다.
 
@@ -156,13 +164,14 @@ HCURSOR CStockExecutorDlg::OnQueryDragIcon()
     return static_cast<HCURSOR>(m_hIcon);
 }
 
+#ifdef _DEBUG
 HRESULT CStockExecutorDlg::OnButtonConnect(IHTMLElement* /*pElement*/)
 {
-    web::json::value cRequestJson;
-    cRequestJson[L"id"] = web::json::value::string(L"id");
-    cRequestJson[L"pw"] = web::json::value::string(L"pw");
-    cRequestJson[L"certPw"] = web::json::value::string(L"certPw");
-    std::wstring jsonString = cRequestJson.serialize();
+    web::json::value requestJson;
+    requestJson[L"id"] = web::json::value::string(L"id");
+    requestJson[L"pw"] = web::json::value::string(L"pw");
+    requestJson[L"certPw"] = web::json::value::string(L"certPw");
+    std::wstring jsonString = requestJson.serialize();
 
     COPYDATASTRUCT cds;
     cds.dwData = WM_STOCK_EXECUTOR_SETSTRINGVARIABLE;
@@ -188,9 +197,9 @@ HRESULT CStockExecutorDlg::OnButtonIsConnected(IHTMLElement* /*pElement*/)
 
 HRESULT CStockExecutorDlg::OnButtonInquireCurrentPrice(IHTMLElement* /*pElement*/)
 {
-    web::json::value cRequestJson;
-    cRequestJson[L"code"] = web::json::value::string(L"005940"); //NH투자증권 코드(005940)
-    std::wstring jsonString = cRequestJson.serialize();
+    web::json::value requestJson;
+    requestJson[L"code"] = web::json::value::string(L"005940"); //NH투자증권 코드(005940)
+    std::wstring jsonString = requestJson.serialize();
 
     COPYDATASTRUCT cds;
     cds.dwData = WM_STOCK_EXECUTOR_SETSTRINGVARIABLE;
@@ -213,6 +222,7 @@ HRESULT CStockExecutorDlg::OnButtonCancel(IHTMLElement* /*pElement*/)
     OnCancel();
     return S_OK;
 }
+#endif
 
 //━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 void CStockExecutorDlg::OnConnect()

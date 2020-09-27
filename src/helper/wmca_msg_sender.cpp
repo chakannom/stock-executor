@@ -9,10 +9,10 @@
 
 void CWmcaMsgSender::Connect(HWND hWnd)
 {
-    web::json::value cRequestModel = web::json::value::parse(m_strData);
-    CStringA strId(cRequestModel.at(L"id").as_string().c_str());
-    CStringA strPw(cRequestModel.at(L"pw").as_string().c_str());
-    CStringA strCertPw(cRequestModel.at(L"certPw").as_string().c_str());
+    web::json::value reqJson = web::json::value::parse(m_strData);
+    CStringA strId(reqJson.at(L"id").as_string().c_str());
+    CStringA strPw(reqJson.at(L"pw").as_string().c_str());
+    CStringA strCertPw(reqJson.at(L"certPw").as_string().c_str());
 
     //접속 및 로그인
     //매체코드는 특별한 경우를 제외하고 항상 아래 기본값을 사용하시기 바랍니다.
@@ -33,9 +33,9 @@ BOOL CWmcaMsgSender::IsConnected()
 
 void CWmcaMsgSender::InquireCurrentPrice(HWND hWnd)
 {
-    web::json::value cRequestModel = web::json::value::parse(m_strData);
+    web::json::value reqJson = web::json::value::parse(m_strData);
     //종목코드를 가져옵니다
-    CStringA strCode(cRequestModel.at(L"code").as_string().c_str());
+    CStringA strCode(reqJson.at(L"code").as_string().c_str());
 
     //주식현재가조회 서비스에서 요구하는 입력값을 저장할 구조체 변수입니다.
     Tc1101InBlock c1101Inblock;

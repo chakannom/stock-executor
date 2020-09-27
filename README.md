@@ -44,5 +44,5 @@ stock-executor.exe
 for Release
 
 ```
-stock-executor.exe --executor uuid
+stock-executor.exe --execute uuid
 ```

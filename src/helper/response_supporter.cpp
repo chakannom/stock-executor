@@ -1,6 +1,7 @@
-#define UNICODE
+#define _UNICODE
 #include "core/framework.h"
 #include "util/string_util.h"
+#include "util/datetime_util.h"
 #include "trio_inv.h"
 #include "wmca_intf.h"
 #include "response_supporter.h"
@@ -10,12 +11,12 @@ web::json::value CResponseSupporter::GetConnectedData(LOGINBLOCK* pLogin)
     web::json::value json = web::json::value::object();
 
     // data.connectedDate: 접속시간
-    uint64_t connectedDate = strtoull(SCOPY_A(pLogin->pLoginInfo->szDate), nullptr, 10);
+    time_t connectedDate = CDateTimeUtil::GetEpochMilli(SCOPY_A(pLogin->pLoginInfo->szDate));
     json[L"connectedDate"] = web::json::value::number(connectedDate);
 
     // data.username: 접속자ID
     CStringW username(SCOPY_A(pLogin->pLoginInfo->szUserID).TrimRight());
-    json[L"username"] = web::json::value::string(username.GetBuffer());
+    json[L"username"] = web::json::value::string(username.GetString());
 
     // data.accounts: 계좌목록
     json[L"accounts"] = web::json::value::array();
@@ -25,10 +26,10 @@ web::json::value CResponseSupporter::GetConnectedData(LOGINBLOCK* pLogin)
         ACCOUNTINFO* pAccountInfo = &(pLogin->pLoginInfo->accountlist[i]);
         // data.accounts.name: 계좌명
         CStringW accountName(SCOPY_A(pAccountInfo->szAccountName).TrimRight());
-        json[L"accounts"][i][L"name"] = web::json::value::string(accountName.GetBuffer());
+        json[L"accounts"][i][L"name"] = web::json::value::string(accountName.GetString());
         // data.accounts.name: 계좌번호
         CStringW accountNo(SCOPY_A(pAccountInfo->szAccountNo).TrimRight());
-        json[L"accounts"][i][L"number"] = web::json::value::string(accountNo.GetBuffer());
+        json[L"accounts"][i][L"number"] = web::json::value::string(accountNo.GetString());
     }
 
     return json;
@@ -40,16 +41,16 @@ web::json::value CResponseSupporter::GetCurrentPriceInformationData(Tc1101OutBlo
 
     // data.information.code: 종목코드
     CStringW code(SCOPY_A(pc1101Outblock->code));
-    json[L"code"] = web::json::value::string(code.GetBuffer());
+    json[L"code"] = web::json::value::string(code.GetString());
     // data.information.name: 종목명
     CStringW name(SCOPY_A(pc1101Outblock->hname).TrimRight());
-    json[L"name"] = web::json::value::string(name.GetBuffer());
+    json[L"name"] = web::json::value::string(name.GetString());
     // data.information.price: 현재가
     uint32_t price = strtoul(SCOPY_A(pc1101Outblock->price), nullptr, 10);
     json[L"price"] = web::json::value::number(price);
     // data.information.sign: 등락부호
     CStringW sign(SCOPY_A(pc1101Outblock->sign));
-    json[L"sign"] = web::json::value::string(sign.GetBuffer());
+    json[L"sign"] = web::json::value::string(sign.GetString());
     // data.information.change: 등락폭
     uint32_t change = strtoul(SCOPY_A(pc1101Outblock->change), nullptr, 10);
     json[L"change"] = web::json::value::number(change);
@@ -71,13 +72,16 @@ web::json::value CResponseSupporter::GetCurrentPriceInformationData(Tc1101OutBlo
     // data.information.yurate: 유동주회전율
     float yurate = strtof(SCOPY_A(pc1101Outblock->yurate), nullptr);
     json[L"yurate"] = web::json::value::number(yurate);
+    // data.information.value: 거래대금
+    uint32_t value = strtoul(SCOPY_A(pc1101Outblock->value), nullptr, 10);
+    json[L"value"] = web::json::value::number(value);
     //////......
     // data.information.sosokz6: 코스피코스닥구분
     CStringW sosokz6(SCOPY_A(pc1101Outblock->sosokz6));
-    json[L"sosokz6"] = web::json::value::string(sosokz6.GetBuffer());
+    json[L"sosokz6"] = web::json::value::string(sosokz6.GetString());
     // data.information.jisunamez18: 업종명
     CStringW jisunamez18(SCOPY_A(pc1101Outblock->jisunamez18).TrimRight());
-    json[L"jisunamez18"] = web::json::value::string(jisunamez18.GetBuffer());
+    json[L"jisunamez18"] = web::json::value::string(jisunamez18.GetString());
 
     return json;
 }
@@ -88,13 +92,13 @@ web::json::value CResponseSupporter::GetCurrentPriceVariableVolumeData(Tc1101Out
 
     // data.variableVolume.[].time: 시간
     CStringW time(SCOPY_A(pc1101Outblock2->time));
-    json[L"time"] = web::json::value::string(time.GetBuffer());
+    json[L"time"] = web::json::value::string(time.GetString());
     // data.variableVolume.[].price: 현재가
     uint32_t price = strtoul(SCOPY_A(pc1101Outblock2->price), nullptr, 10);
     json[L"price"] = web::json::value::number(price);
     // data.variableVolume.[].sign: 등락부호
     CStringW sign(SCOPY_A(pc1101Outblock2->sign));
-    json[L"sign"] = web::json::value::string(sign.GetBuffer());
+    json[L"sign"] = web::json::value::string(sign.GetString());
     // data.variableVolume.[].change: 등락폭
     uint32_t change = strtoul(SCOPY_A(pc1101Outblock2->change), nullptr, 10);
     json[L"change"] = web::json::value::number(change);
@@ -120,13 +124,13 @@ web::json::value CResponseSupporter::GetCurrentPriceSimultaneousQuoteData(Tc1101
 
     // data.simultaneousQuote.dongsi: 동시호가구분
     CStringW dongsi(SCOPY_A(pc1101Outblock3->dongsi));
-    json[L"dongsi"] = web::json::value::string(dongsi.GetBuffer());
+    json[L"dongsi"] = web::json::value::string(dongsi.GetString());
     // data.simultaneousQuote.jeqprice: 예상체결가
     uint32_t jeqprice = strtoul(SCOPY_A(pc1101Outblock3->jeqprice), nullptr, 10);
     json[L"jeqprice"] = web::json::value::number(jeqprice);
     // data.simultaneousQuote.jeqsign: 예상체결부호
     CStringW jeqsign(SCOPY_A(pc1101Outblock3->jeqsign));
-    json[L"jeqsign"] = web::json::value::string(jeqsign.GetBuffer());
+    json[L"jeqsign"] = web::json::value::string(jeqsign.GetString());
     // data.simultaneousQuote.jeqchange: 예상체결등락폭
     uint32_t jeqchange = strtoul(SCOPY_A(pc1101Outblock3->jeqchange), nullptr, 10);
     json[L"jeqchange"] = web::json::value::number(jeqchange);
@@ -138,13 +142,13 @@ web::json::value CResponseSupporter::GetCurrentPriceSimultaneousQuoteData(Tc1101
     json[L"jeqvol"] = web::json::value::number(jeqvol);
     // data.simultaneousQuote.chkdataz1: ECN정보유무구분
     CStringW chkdataz1(SCOPY_A(pc1101Outblock3->chkdataz1));
-    json[L"chkdataz1"] = web::json::value::string(chkdataz1.GetBuffer());
+    json[L"chkdataz1"] = web::json::value::string(chkdataz1.GetString());
     // data.simultaneousQuote.ecnPrice: ECN전일종가
     uint32_t ecnPrice = strtoul(SCOPY_A(pc1101Outblock3->ecn_price), nullptr, 10);
     json[L"ecnPrice"] = web::json::value::number(ecnPrice);
     // data.simultaneousQuote.ecnSign: ECN부호
     CStringW ecnSign(SCOPY_A(pc1101Outblock3->ecn_sign));
-    json[L"ecnSign"] = web::json::value::string(ecnSign.GetBuffer());
+    json[L"ecnSign"] = web::json::value::string(ecnSign.GetString());
     // data.simultaneousQuote.ecnChange: ECN등락폭
     uint32_t ecnChange = strtoul(SCOPY_A(pc1101Outblock3->ecn_change), nullptr, 10);
     json[L"ecnChange"] = web::json::value::number(ecnChange);
@@ -156,7 +160,7 @@ web::json::value CResponseSupporter::GetCurrentPriceSimultaneousQuoteData(Tc1101
     json[L"ecnVolume"] = web::json::value::number(ecnVolume);
     // data.simultaneousQuote.ecnJeqsign: ECN대비예상체결부호
     CStringW ecnJeqsign(SCOPY_A(pc1101Outblock3->ecn_jeqsign));
-    json[L"ecnJeqsign"] = web::json::value::string(ecnJeqsign.GetBuffer());
+    json[L"ecnJeqsign"] = web::json::value::string(ecnJeqsign.GetString());
     // data.simultaneousQuote.ecnJeqchange: ECN대비예상체결등락폭
     uint32_t ecnJeqchange = strtoul(SCOPY_A(pc1101Outblock3->ecn_jeqchange), nullptr, 10);
     json[L"ecnJeqchange"] = web::json::value::number(ecnJeqchange);

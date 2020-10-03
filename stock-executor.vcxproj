@@ -137,6 +137,7 @@
     <ClInclude Include="src\helper\wmca_intf.h" />
     <ClInclude Include="src\helper\wmca_msg_receiver.h" />
     <ClInclude Include="src\stock-executor.h" />
+    <ClInclude Include="src\util\datetime_util.h" />
     <ClInclude Include="src\util\string_util.h" />
   </ItemGroup>
   <ItemGroup>

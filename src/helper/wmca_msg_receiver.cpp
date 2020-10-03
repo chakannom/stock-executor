@@ -1,4 +1,4 @@
-#define UNICODE
+#define _UNICODE
 #include "core/framework.h"
 #include "util/string_util.h"
 #include "trio_def.h"

@@ -25,13 +25,13 @@ To optimize the stock-executor-for-nh-namuh application, run:
 
 for Debugging
 ```
-MSBuild.exe stock-executor.vcxproj /p:Configuration=Debug
+MSBuild.exe stock-executor-for-nh-namuh.vcxproj /p:Configuration=Debug
 ```
 
 for Release
 
 ```
-MSBuild.exe stock-executor.vcxproj /p:Configuration=Release
+MSBuild.exe stock-executor-for-nh-namuh.vcxproj /p:Configuration=Release
 ```
 
 To ensure everything worked, run:

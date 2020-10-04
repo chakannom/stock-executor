@@ -44,5 +44,5 @@ stock-executorr-for-nh-namuh.exe
 for Release
 
 ```
-stock-executorr-for-nh-namuh.exe --execute uuid
+stock-executor-for-nh-namuh.exe --execute uuid
 ```

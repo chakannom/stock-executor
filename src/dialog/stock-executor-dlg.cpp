@@ -1,6 +1,6 @@
 // stock-executor-dlg.cpp: 구현 파일
 //
-#define UNICODE
+#define _UNICODE
 #include <string>
 #include <cpprest/json.h>
 

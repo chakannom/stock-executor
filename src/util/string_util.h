@@ -3,7 +3,8 @@
 
 #include <afxwin.h>
 
-class CStringUtil {
+class CStringUtil
+{
 public:
     //━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
     //	구조체 필드값을 문자열 형태로 변환하는 유틸리티 함수입니다.

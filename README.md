@@ -1,4 +1,4 @@
-# Stock-Executor
+# Stock-Executor for NH-NAMUH
 
 * This is a tool to call API of [NAMUH (NH Investment & Securities)](https://www.mynamuh.com) by request received from agent.
 * This application runs on only Windows.
@@ -21,28 +21,28 @@ Before you can build this project, you must install and configure the following 
 
 ## Building
 
-To optimize the stock-executor application, run:
+To optimize the stock-executor-for-nh-namuh application, run:
 
 for Debugging
 ```
-...
+MSBuild.exe stock-executor-for-nh-namuh.vcxproj /p:Configuration=Debug
 ```
 
 for Release
 
 ```
-...
+MSBuild.exe stock-executor-for-nh-namuh.vcxproj /p:Configuration=Release
 ```
 
 To ensure everything worked, run:
 
 for Debugging
 ```
-stock-executor.exe
+stock-executorr-for-nh-namuh.exe
 ```
 
 for Release
 
 ```
-stock-executor.exe --execute uuid
+stock-executor-for-nh-namuh.exe --execute uuid
 ```

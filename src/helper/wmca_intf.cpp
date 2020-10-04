@@ -1,7 +1,7 @@
 // wmca_intf.cpp: implementation of the WmcaIntf class.
 //
 //////////////////////////////////////////////////////////////////////
-#define UNICODE
+#define _UNICODE
 #include "core/framework.h"
 #include "wmca_intf.h"
 

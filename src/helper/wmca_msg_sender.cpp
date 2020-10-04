@@ -1,4 +1,4 @@
-#define UNICODE
+#define _UNICODE
 #include <cpprest/json.h>
 
 #include "core/framework.h"
